@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://front-node-five.vercel.app"
+       "https://front-node-psi.vercel.app"
+
   ]
 }));
 const PORT = process.env.PORT;
