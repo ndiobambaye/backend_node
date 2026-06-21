@@ -94,6 +94,24 @@ exports.getProfil = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+exports.modifierProfil = async (req, res) => {
+  try {
+    const { prenom, nom, email } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { prenom, nom, email },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur introuvable' });
+    }
+    res.json({ message: 'Profil mis a jour', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
 
 
 
