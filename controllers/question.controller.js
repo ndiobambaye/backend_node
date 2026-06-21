@@ -75,3 +75,40 @@ exports.ajouterReponse = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+// Voter pour une question (+1 ou -1)
+exports.voterQuestion = async (req, res) => {
+  try {
+    const { valeur } = req.body; // 1 ou -1
+    const question = await Question.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { votes: valeur } },
+      { new: true }
+    );
+    if (!question) {
+      return res.status(404).json({ message: 'Question introuvable' });
+    }
+    res.json({ votes: question.votes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// Voter pour une reponse (+1 ou -1)
+exports.voterReponse = async (req, res) => {
+  try {
+    const { valeur } = req.body;
+    const reponse = await Reponse.findByIdAndUpdate(
+      req.params.repId,
+      { $inc: { votes: valeur } },
+      { new: true }
+    );
+    if (!reponse) {
+      return res.status(404).json({ message: 'Reponse introuvable' });
+    }
+    res.json({ votes: reponse.votes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
