@@ -24,13 +24,20 @@ exports.listerQuestions = async (req, res) => {
     const questions = await Question.find()
       .populate('auteur', 'prenom nom')
       .sort({ createdAt: -1 });
-    res.json({ questions });
+
+    const questionsAvecCompte = await Promise.all(
+      questions.map(async (q) => {
+        const nbReponses = await Reponse.countDocuments({ question: q._id });
+        return { ...q.toObject(), nbReponses };
+      })
+    );
+
+    res.json({ questions: questionsAvecCompte });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
-
 // Recuperer une question + ses reponses
 exports.getQuestion = async (req, res) => {
   try {
