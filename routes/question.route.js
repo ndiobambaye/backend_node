@@ -7,6 +7,7 @@ const {
   ajouterReponse,
   voterQuestion,
   voterReponse,
+  listerTags,
 } = require('../controllers/question.controller');
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.post('/', auth, creerQuestion);
 router.post('/:id/reponses', auth, ajouterReponse);
 router.post('/:id/vote', auth, voterQuestion);
 router.post('/:qid/reponses/:repId/vote', auth, voterReponse);
+router.get('/tags/liste', listerTags);
 
 module.exports = router;

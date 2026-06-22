@@ -112,3 +112,17 @@ exports.voterReponse = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+// Lister tous les tags avec leur nombre de questions
+exports.listerTags = async (req, res) => {
+  try {
+    const tags = await Question.aggregate([
+      { $unwind: '$tags' },
+      { $group: { _id: '$tags', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+    res.json({ tags });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
